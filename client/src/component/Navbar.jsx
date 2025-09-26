@@ -15,10 +15,15 @@ function Navbar(){
                     </div>
                     <div className="offcanvas-body">
                         <div className="navbar-nav  ">
-                        <a className="nav-link active" aria-current="page" href="/home">Home</a>
-                        <a className="nav-link" href="#">Test</a>
-                        <a className="nav-link" href="#">2</a>
+                            <a className="nav-link active" aria-current="page" href="/home">Home</a>
+                            <a className="nav-link" href="#">Test</a>
+                            <a className="nav-link" href="#">2</a>
+                            <li>
+                                <hr className="dropdown-divider"/>
+                            </li>
+
                             <ul className="navbar-nav d-md-none ">
+
                                 <li className="nav-item">
                                     <a className="nav-link" href="#">Sign Up</a>
                                 </li>
@@ -26,11 +31,9 @@ function Navbar(){
                         </div>
 
 
-
-
                     </div>
                 </div>
-                <a href="#" className=" mt-1 ms-auto d-none d-md-inline-block">
+                <a href="/login" className=" mt-1 ms-auto d-none d-md-inline-block">
                     Sign Up
                 </a>
             </div>

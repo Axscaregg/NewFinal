@@ -1,0 +1,17 @@
+:root {
+    --bs-accordion-active-bg: transparent;   /* พื้นหลังโปร่ง */
+    --bs-accordion-active-color: inherit;    /* ใช้สีตัวอักษรปกติ */
+}
+
+/* หรือแก้เฉพาะ accordion บางตัว */
+.my-accordion {
+    --bs-accordion-active-bg: #fff;        /* สีขาว */
+    --bs-accordion-active-color: #000;     /* ตัวอักษรดำ */
+}
+
+.my-btn{
+    --bs-btn-focus-shadow-rgb: 0,0,0; /* เปลี่ยนสีเงา focus เป็นดำ (แทบมองไม่เห็น) */
+    --bs-btn-active-shadow: none;
+    --bs-btn-active-border-color: white;
+    --bs-btn-active-bg: red;
+}
