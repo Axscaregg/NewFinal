@@ -1,4 +1,36 @@
+import {useState,useEffect} from "react";
+import {logout} from "../api/auth.js";
+import {useNavigate} from "react-router-dom";
 function Navbar(){
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate()
+    useEffect(() => {
+
+        const load = () => {
+            const u = localStorage.getItem("user");
+            setUser(u ? JSON.parse(u) : null);
+        };
+        load();
+
+        const onStorage = (e) => {
+            if (e.key === "user") {
+                setUser(e.newValue ? JSON.parse(e.newValue) : null);
+            }
+        };
+        window.addEventListener("userchange", load);
+        window.addEventListener("storage", onStorage);
+        return () => {
+            window.removeEventListener("userchange", load);
+            window.removeEventListener("storage", onStorage);
+        }
+    }, []);
+
+    const doLogout = async () => {
+        await logout();
+        setUser(null);
+        window.dispatchEvent(new Event("userchange"));
+        navigate("/")
+    };
     return(
         <nav className="navbar navbar-expand-md navbar-custom flex-wrap flex-lg-nowrap ">
             <div className="container-lg">
@@ -24,18 +56,50 @@ function Navbar(){
 
                             <ul className="navbar-nav d-md-none ">
 
-                                <li className="nav-item">
-                                    <a className="nav-link" href="#">Sign Up</a>
-                                </li>
+                                {!user ? (
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="/login">Sign Up</a>
+                                    </li>
+                                ) : (
+                                    <>
+                                        <li className="nav-item dropdown">
+                                            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                                {user.email}
+                                            </a>
+                                            <ul className="dropdown-menu">
+                                                <li><a className="dropdown-item" href="/profile">Profile</a></li>
+                                                <li><hr className="dropdown-divider" /></li>
+                                                <li><button className="dropdown-item" onClick={doLogout}>Logout</button></li>
+                                            </ul>
+                                        </li>
+                                    </>
+                                )}
                             </ul>
                         </div>
 
 
                     </div>
                 </div>
-                <a href="/login" className=" mt-1 ms-auto d-none d-md-inline-block">
-                    Sign Up
-                </a>
+                <div className="ms-auto d-none d-md-inline-block">
+                    {!user ? (
+                        <a href="/login" className="mt-1">Sign Up</a>
+                    ) : (
+                        <div className="dropdown">
+                            <button className="btn bg-light border dropdown-toggle rounded-pill px-3 py-1"
+                                    data-bs-toggle="dropdown">
+                <span className="me-2 badge rounded-circle bg-secondary">
+                  {String(user.email).charAt(0).toUpperCase()}
+                </span>
+                                {user.email}
+                            </button>
+                            <ul className="dropdown-menu dropdown-menu-end">
+                                <li><a className="dropdown-item" href="/profile">Profile</a></li>
+                                <li><hr className="dropdown-divider" /></li>
+                                <li><button className="dropdown-item" onClick={doLogout}>Logout</button></li>
+                            </ul>
+                        </div>
+                    )}
+                </div>
             </div>
         </nav>
     )

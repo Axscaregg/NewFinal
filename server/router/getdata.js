@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
         const users = await db.collection('users').find().toArray();
         res.json(users);
     } catch (err) {
-        res.status(500).json({ error: "Failed to fetch users" });
+        res.status(500).json({ error: "Failed to fetch " });
     }
 });
 

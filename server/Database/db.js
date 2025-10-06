@@ -10,7 +10,7 @@ async function connectDB() {
         serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
     });
     await client.connect();
-    console.log("✅ Connected to MongoDB");
+    console.log(" Connected to MongoDB");
 
     db = client.db("myDatabase"); //
     return db;
@@ -19,7 +19,7 @@ async function connectDB() {
 
 function getDB() {
     if (!db) {
-        throw new Error("❌ Database not initialized. Call connectDB() first.");
+        throw new Error(" Database not initialized. Call connectDB() first.");
     }
     return db;
 }

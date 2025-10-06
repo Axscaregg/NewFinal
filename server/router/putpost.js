@@ -4,16 +4,7 @@ const router = express.Router()
 const { ObjectId } = require('mongodb');
 router.post("/add", async (req, res) => {
     try {
-        let newDocument = {
-            name: req.body.name,
-            Lastname: req.body.Lastname,
-            Gender: req.body.Gender,
-            Email:req.body.Email,
-            Phone:req.body.Phone,
-            createdAt: new Date()
-
-
-        };
+        let newDocument = {...req.body,createdAt: new Date()};
         let collection = await getDB().collection("users");
         let result = await collection.insertOne(newDocument);
         res.status(201).json({
@@ -38,20 +29,20 @@ router.post("/upsert", async (req,res) =>{
                         message: "Invalid Id"
                     })
                 }
-                const updatedata = {
+                const updata = {
                     name,Lastname, gender,Email,Phone,updateAt: new Date()
                 }
                 result = await collection.updateOne(
                     {_id: new ObjectId(_id)},
-                    { $set: updatedatas}
+                    { $set: updata}
                 )
                 if(result.matchedCount ===0){
                     res.status(400).json({
                         message: "Not Update"
                     })
                 }
-                operationType ="updata"
-                finalDocument(_id,...updatedata)
+                operationType ="update"
+                finalDocument(_id,...updata)
             }else{
                 const newDocument = {
                     name: req.body.name,

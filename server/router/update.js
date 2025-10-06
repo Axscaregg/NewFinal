@@ -12,12 +12,7 @@ router.put("/update/:id",async (req,res) =>{
             return res.status(400).json({ message: 'Invalid ID format' });
         }
         const query = { _id: new ObjectId(req.params.id) };
-        const updateData = {
-            name: req.body.name,
-            Lastname: req.body.Lastname,
-            Gender: req.body.Gender,
-            Email:req.body.Email,
-            Phone:req.body.Phone,
+        const updateData = {...req.body,
             updateAt: new Date()
         }
         const collection =  await  getDB().collection("users")
