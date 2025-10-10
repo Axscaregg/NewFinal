@@ -1,6 +1,6 @@
-import React ,{useState, useEffect}from "react"
-import axios from "axios";
-import ReactFlagsSelect from "react-flags-select";
+import React ,{useState}from "react"
+import api from "../api/axios.js";
+import {setAccessToken} from "../api/axios.js";
 
 function profile(){
     const [form,setform] = useState({})
@@ -51,12 +51,43 @@ function profile(){
         "Agnostic",
         "Other"
     ];
+    const [error,seterror] = useState("")
     const handlechange = (name,value) =>{
         setform((prev) =>{
             return{...prev,[name]:value}
         })
     }
+    const id = localStorage.getItem("user")
 
+    const storageObject = JSON.parse(id)
+    const submit = async () =>{
+        setloading(true)
+        seterror("");
+
+        try {
+
+            const res = await api.post("/profile/upsert",{
+                id: storageObject.id,
+                name:form?.name,
+                Lname: form?.Lname,
+                gender: form?.gender,
+                date: form?.date,
+                contry: form?.contry,
+                nation: form?.nation,
+                weight: form?.weight,
+                height: form?.height,
+                phone: form?.phone,
+                lineid: form?.lineid
+
+            })
+            console.log("Success")
+        }catch (error){
+        console.error("Error input",error)
+            seterror("An unexpected error occurred. Please try again.");
+        }finally {
+            setloading(false)
+        }
+    }
     return(
         <div className="container-xxl mt-3 my-md4 ">
             <div className="row">
@@ -82,6 +113,12 @@ function profile(){
                                                                 aria-current="true">
                                                             Profile
                                                         </button>
+                                                        <div className="my-2"></div>
+                                                        <button type="button"
+                                                                className="list-group-item list-group-item-action "
+                                                                aria-current="true">
+                                                            Education
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -99,32 +136,44 @@ function profile(){
                             <div className="row">
                                 <div className="col-sm">
                                     <label id="name" className="form-label">Name</label>
-                                    <input type="text" className="form-control" id="name" />
+                                    <input type="text" className="form-control" id="name" value={form?.name} onChange={(e)=>{
+                                        handlechange("name",e.target.value)
+                                    }}/>
                                 </div>
                                 <div className="col-sm">
                                     <label id="Lname" className="form-label">Lastname</label>
-                                    <input type="text" className="form-control" id="Lname" />
+                                    <input type="text" className="form-control" id="Lname" value={form?.Lname} onChange={(e)=>{
+                                        handlechange("Lname",e.target.value)
+                                    }} />
                                 </div>
                             </div>
                             <hr/>
                             <div className="row">
                                 <div className="col-sm-3">
                                     <label htmlFor="inputGender" className="form-label">Gender</label>
-                                    <select id="inputGender" className="form-select">
-                                        <option selected>Male</option>
-                                        <option selected>Female</option>
+                                    <select id="inputGender" className="form-select" value={form?.gender} onChange={(e)=>{
+                                        handlechange("gender",e.target.value)
+                                    }}>
+                                        <option  value="male">Male</option>
+                                        <option  value="female">Female</option>
                                     </select>
                                 </div>
                                 <div className="col-sm-5">
                                     <label htmlFor="startDate" className="pb-2">Birthday</label>
-                                    <input id="startDate" className="form-control" type="date"/>
+                                    <input id="startDate" className="form-control" type="date" value={form?.date} onChange={(e)=>{
+                                        handlechange("date",e.target.value)
+                                    }}/>
                                 </div>
                                 <div className="col-sm-3">
                                     <label htmlFor="nation" className="form-label">Nation</label>
-                                    <select id="inputnation" className="form-select">
+                                    <select id="inputnation" className="form-select" value={form?.contry} onChange={(e)=>{
+                                        handlechange("contry",e.target.value)
+                                    }}>
                                         <option value="">Select
                                         </option>{COUNTRIES.map((contry)=>(
-                                            <option key={contry} valผue={contry}>{contry}</option>
+                                            <option key={contry} value={contry}>
+                                                {contry}
+                                            </option>
                                     ))}
                                     </select>
                                 </div>
@@ -133,36 +182,46 @@ function profile(){
                             <div className="row">
                             <div className="col-sm-4">
                                 <label htmlFor="nation" className="form-label">RELIGIONS</label>
-                                <select id="inputnation" className="form-select">
+                                <select id="inputnation" className="form-select" value={form?.nation} onChange={(e)=>{
+                                    handlechange("nation",e.target.value)
+                                }}>
                                     <option value="">Select
-                                    </option>{RELIGIONS.map((contry)=>(
-                                    <option key={contry} value={contry}>{contry}</option>
+                                    </option>{RELIGIONS.map((nation)=>(
+                                    <option key={nation} value={nation}>{nation}</option>
                                 ))}
                                 </select>
                             </div>
                             <div className="col-sm-3">
                                 <label id="Weight" className="form-label">Weight</label>
-                                <input type="text" className="form-control" id="Weight"  placeholder="Kg"/>
+                                <input type="text" className="form-control" id="Weight"  placeholder="Kg" value={form?.weight} onChange={(e)=>{
+                                    handlechange("weight",e.target.value)
+                                }}/>
                             </div>
                                 <div className="col-sm-3">
                                     <label id="Height" className="form-label">Height</label>
-                                    <input type="text" className="form-control" id="Weight"  placeholder="cm"/>
+                                    <input type="text" className="form-control" id="Weight"  placeholder="cm" value={form?.height} onChange={(e)=>{
+                                        handlechange("height",e.target.value)
+                                    }}/>
                                 </div>
                             </div>
                             <hr/>
                             <div className="row">
                                  <div className="col-sm-3">
                                     <label id="Phone" className="form-label">Phone</label>
-                                    <input type="text" className="form-control" id="Phone" />
+                                    <input type="text" className="form-control" id="Phone" value={form?.phone} onChange={(e)=>{
+                                        handlechange("phone",e.target.value)
+                                    }}/>
                                  </div>
                                  <div className="col-sm-5">
                                         <label id="Lineid" className="form-label">Line id</label>
-                                        <input type="text" className="form-control" id="Lineid" />
+                                        <input type="text" className="form-control" id="lineid" value={form?.Lineid} onChange={(e)=>{
+                                            handlechange("lineid",e.target.value)
+                                        }} />
                                  </div>
                             </div>
                             <div className="row">
                                 <div className="d-flex justify-content-center mt-4">
-                                    <button type="submit" className="btn btn-primary ">Save</button>
+                                    <button type="submit" className="btn btn-primary " disabled={loading} onClick={submit}>Save</button>
                                 </div>
                             </div>
                     </div>

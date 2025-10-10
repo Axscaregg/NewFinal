@@ -18,7 +18,7 @@ router.post("/add", async (req, res) => {
 });
 router.post("/upsert", async (req,res) =>{
     try {
-        const {_id,name,Lastname,gender,Email,Phone} = req.body
+        const {_id,name,Lname,gender,date,contry,nation,weight,height,phone,lineid} = req.body
         let collection = await getDB().collection("users");
         let result;
         let operationType;
@@ -30,7 +30,7 @@ router.post("/upsert", async (req,res) =>{
                     })
                 }
                 const updata = {
-                    name,Lastname, gender,Email,Phone,updateAt: new Date()
+                    name,Lname, gender,Email,date,contry,nation,weight,height,phone,lineid,updateAt: new Date()
                 }
                 result = await collection.updateOne(
                     {_id: new ObjectId(_id)},
@@ -46,10 +46,15 @@ router.post("/upsert", async (req,res) =>{
             }else{
                 const newDocument = {
                     name: req.body.name,
-                    Lastname: req.body.Lastname,
-                    Gender: req.body.Gender,
-                    Email:req.body.Email,
-                    Phone:req.body.Phone,
+                    Lastname: req.body.Lname,
+                    Gender: req.body.gender,
+                    Birthday: req.body.date,
+                    Country: req.body.contry,
+                    Nationality: req.body.nation,
+                    Weight: req.body.weight,
+                    Height: req.body.height,
+                    Phone:req.body.phone,
+                    Lineid: req.body.lineid,
                     createdAt: new Date()
 
 

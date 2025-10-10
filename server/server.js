@@ -5,6 +5,7 @@ require('dotenv').config();
 const usersRouter = require("./router/getdata")
 const Adddata = require("./router/putpost")
 const update = require("./router/update")
+const profile = require("./router/profile")
 const Auth = require('./router/auth')
 const cookieParser = require('cookie-parser')
 
@@ -16,7 +17,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-
+app.use("/profile",profile)
 app.use('/users', usersRouter);
 app.use('/api',Auth)
 app.use('/',Adddata)

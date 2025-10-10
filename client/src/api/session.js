@@ -1,13 +1,15 @@
 // src/api/sessionHelpers.js
 import api, { setAccessToken } from "./axios";
 export function setAccessTokenAfterRefresh(newToken) {
+    localStorage.setItem("accessToken",newToken)
+    window.dispatchEvent(new Event("authChange"))
 }
 export async function handleAuthExpired() {
     try {
         await api.post("/api/logout");
     } catch {
     }
-    setAccessToken(null);
+    localStorage.removeItem("accessToken")
     localStorage.removeItem("user");
-    window.dispatchEvent(new Event("authChanged")); // ให้ Navbar อัปเดตทันที
+    window.dispatchEvent(new Event("authChange"));
 }

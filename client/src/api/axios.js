@@ -2,9 +2,10 @@ import axios from "axios";
 import {setAccessTokenAfterRefresh,handleAuthExpired} from "./session.js";
 
 const api = axios.create({
-    baseURL: "",
+    baseURL: "http://localhost:5000",
     withCredentials: true
 })
+
 
 let accessToken = null
 export  const setAccessToken = (t) =>{
@@ -13,22 +14,37 @@ export  const setAccessToken = (t) =>{
     else delete api.defaults.headers.common["Authorization"];
 }
 
+const saved = localStorage.getItem("accessToken");
+if (saved) setAccessToken(saved);
+
 api.interceptors.request.use((config)=>{
-    if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`
+    const token = localStorage.getItem("accessToken")
+    if(token) config.headers["Authorization"] = `Bearer ${token}`
         return config
     })
 
 let isRefresh =  false
 let queue = []
-const flushqueue = (err,token = null) =>{
-    queue.forEach(({reslove,reject})=>(err ? reject(err): reslove(token)))
+const processqueue = (err,token = null) =>{
+  queue.forEach(prom =>{
+      if(err){
+          prom.reject(err)
+      }else prom.resolve(token)
+  })
     queue = []
 }
 
 api.interceptors.response.use((res) =>res, async (error) =>{
     const original = error.config
-    if(error?.response?.status !== 401 || original?._retry){
+    if(!error.response||error.response.status !== 401 || original._retry){
         return Promise.reject(error)
+    }
+    if(isRefresh){
+        return  new Promise((resolve,reject)=>{
+            queue.push({resolve,reject})
+        }).then(token=>{
+            original.headers['Authorization'] ='Bearer' + token
+        })
     }
     original._retry = true;
     isRefresh = true
@@ -36,14 +52,13 @@ api.interceptors.response.use((res) =>res, async (error) =>{
         const {data} = await  api.post("/api/refresh")
         const newToken = data?.accessToken
         if(!newToken) throw new Error("No access token in refresh response")
-        setAccessToken(newToken)
-        setAccessTokenAfterRefresh(newToken)
-        flushqueue(null,newToken)
-        original.header.Authorization =  `Bearer ${accessToken}`
+        localStorage.setItem("accessToken",newToken)
+        processqueue(null,newToken)
+        original.headers.Authorization =  `Bearer ${newToken}`
         return  api(original)
 
     }catch (e){
-        flushqueue(e, null);
+        processqueue(e, null);
         handleAuthExpired();
         return Promise.reject(e);
     }finally {

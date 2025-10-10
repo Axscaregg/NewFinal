@@ -33,7 +33,7 @@ function  bindEvent(){
         touchActivity()
     }
     event.forEach((ev) => window.addEventListener(ev,handler,{passive:true}))
-    return()=>event.forEach((ev)=> window.addEventListener(ev,handler))
+    return()=>event.forEach((ev)=> window.removeEventListener(ev,handler))
 }
 let unbind = null
 let unchannel = false

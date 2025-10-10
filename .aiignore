@@ -1,0 +1,24 @@
+# OS / Temp
+.DS_Store
+*.log
+*.tmp
+
+# Dependency Folders
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Build Outputs
+dist/
+build/
+out/
+client/dist/
+client/build/
+
+# Environment Secrets
+.env
+*.env
+
+# IDE / Editor Configs
+.idea/
+.vscode/

@@ -14,7 +14,7 @@ function Navbar(){
 
         const onStorage = (e) => {
             if (e.key === "user") {
-                setUser(e.newValue ? JSON.parse(e.newValue) : null);
+               load()
             }
         };
         window.addEventListener("userchange", load);

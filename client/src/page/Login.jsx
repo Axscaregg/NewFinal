@@ -1,14 +1,29 @@
-import {useState} from "react";
-
+import {useState,useEffect} from "react";
+import api from "../api/axios.js";
 import {useNavigate} from "react-router-dom";
 import {login} from "../api/auth.js";
-
+import {setAccessToken} from "../api/axios.js";
 
 function Login(){
     const [form,setform] = useState({})
     const [loading,setloading] = useState(false)
     const [error,seterror] = useState("")
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        const token = localStorage.getItem("accessToken")
+
+
+        (async ()=>{
+            try {
+                const {data} = await  api.get("/profile/me")
+                if(data) setform(data)
+            }catch (e){
+                console.error(e)
+                seterror("Error Get Profile")
+            }
+        })()
+    },[])
 
     const handlechange = (email,values) =>{
         setform((prev)=>{
