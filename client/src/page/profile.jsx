@@ -1,10 +1,10 @@
-import React ,{useState}from "react"
+import React, {useEffect, useState} from "react"
 import api from "../api/axios.js";
 import {setAccessToken} from "../api/axios.js";
 
 function profile(){
     const [form,setform] = useState({})
-    const [loading,setloading] = useState(false)
+    const [loading,setloading] = useState(true)
     const COUNTRIES = [
         "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
         "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas",
@@ -52,6 +52,36 @@ function profile(){
         "Other"
     ];
     const [error,seterror] = useState("")
+    const [isediting,setisediting] = useState(false)
+    const [backup,setbackup] = useState({})
+    useEffect(()=>{
+        const fetchapi  = async ()=>{
+            try {
+                    const {data} = await api.get("/profile/me")
+                if(data){
+                    setform(data)
+                    setbackup(data)
+                }
+            }catch (error){
+                console.log("Can't fetch data",error)
+                seterror("Could not load your profile information.")
+            } finally {
+                setloading(false)
+            }
+        }
+        fetchapi()
+    },[])
+
+    const handlesave = async () =>{
+        await submit()
+        setisediting(false)
+        setbackup(form)
+    }
+    const handlecanscel = ()=>{
+        setform(backup)
+        setisediting(false)
+    }
+
     const handlechange = (name,value) =>{
         setform((prev) =>{
             return{...prev,[name]:value}
@@ -69,15 +99,15 @@ function profile(){
             const res = await api.post("/profile/upsert",{
                 id: storageObject.id,
                 name:form?.name,
-                Lname: form?.Lname,
-                gender: form?.gender,
-                date: form?.date,
-                contry: form?.contry,
-                nation: form?.nation,
-                weight: form?.weight,
-                height: form?.height,
-                phone: form?.phone,
-                lineid: form?.lineid
+                Lname: form?.Lastname,
+                gender: form?.Gender,
+                date: form?.Birthday,
+                Country: form?.Country,
+                nation: form?.Nationality,
+                weight: form?.Weight,
+                height: form?.Height,
+                phone: form?.Phone,
+                lineid: form?.Lineid
 
             })
             console.log("Success")
@@ -138,43 +168,45 @@ function profile(){
                                     <label id="name" className="form-label">Name</label>
                                     <input type="text" className="form-control" id="name" value={form?.name} onChange={(e)=>{
                                         handlechange("name",e.target.value)
-                                    }}/>
+                                    }} readOnly={!isediting}
+                                    />
                                 </div>
                                 <div className="col-sm">
                                     <label id="Lname" className="form-label">Lastname</label>
-                                    <input type="text" className="form-control" id="Lname" value={form?.Lname} onChange={(e)=>{
-                                        handlechange("Lname",e.target.value)
-                                    }} />
+                                    <input type="text" className="form-control" id="Lname" value={form?.Lastname} onChange={(e)=>{
+                                        handlechange("Lastname",e.target.value)
+                                    }} readOnly={!isediting}
+                                    />
                                 </div>
                             </div>
                             <hr/>
                             <div className="row">
                                 <div className="col-sm-3">
                                     <label htmlFor="inputGender" className="form-label">Gender</label>
-                                    <select id="inputGender" className="form-select" value={form?.gender} onChange={(e)=>{
-                                        handlechange("gender",e.target.value)
-                                    }}>
+                                    <select id="inputGender" className="form-select" value={form?.Gender} onChange={(e)=>{
+                                        handlechange("Gender",e.target.value)
+                                    }} disabled={!isediting}>
                                         <option  value="male">Male</option>
                                         <option  value="female">Female</option>
                                     </select>
                                 </div>
                                 <div className="col-sm-5">
                                     <label htmlFor="startDate" className="pb-2">Birthday</label>
-                                    <input id="startDate" className="form-control" type="date" value={form?.date} onChange={(e)=>{
-                                        handlechange("date",e.target.value)
-                                    }}/>
+                                    <input id="startDate" className="form-control" type="date" value={form?.Birthday} onChange={(e)=>{
+                                        handlechange("Birthday",e.target.value)
+                                    }} readOnly={!isediting}/>
                                 </div>
                                 <div className="col-sm-3">
-                                    <label htmlFor="nation" className="form-label">Nation</label>
-                                    <select id="inputnation" className="form-select" value={form?.contry} onChange={(e)=>{
-                                        handlechange("contry",e.target.value)
-                                    }}>
+                                    <label htmlFor="country" className="form-label">Nation</label>
+                                    <select id="inputcountry" className="form-select" value={form?.Country} onChange={(e)=>{
+                                        handlechange("Country",e.target.value)
+                                    }} >
                                         <option value="">Select
-                                        </option>{COUNTRIES.map((contry)=>(
-                                            <option key={contry} value={contry}>
-                                                {contry}
+                                        </option>{COUNTRIES.map((country)=>(
+                                            <option key={country} value={country}>
+                                                {country}
                                             </option>
-                                    ))}
+                                    ))} disabled={!isediting}
                                     </select>
                                 </div>
                             </div>
@@ -182,46 +214,61 @@ function profile(){
                             <div className="row">
                             <div className="col-sm-4">
                                 <label htmlFor="nation" className="form-label">RELIGIONS</label>
-                                <select id="inputnation" className="form-select" value={form?.nation} onChange={(e)=>{
-                                    handlechange("nation",e.target.value)
+                                <select id="inputnation" className="form-select" value={form?.Nationality} onChange={(e)=>{
+                                    handlechange("Nationality",e.target.value)
                                 }}>
                                     <option value="">Select
                                     </option>{RELIGIONS.map((nation)=>(
                                     <option key={nation} value={nation}>{nation}</option>
-                                ))}
+                                ))} disabled={!isediting}
                                 </select>
                             </div>
                             <div className="col-sm-3">
                                 <label id="Weight" className="form-label">Weight</label>
-                                <input type="text" className="form-control" id="Weight"  placeholder="Kg" value={form?.weight} onChange={(e)=>{
-                                    handlechange("weight",e.target.value)
-                                }}/>
+                                <input type="text" className="form-control" id="Weight"  placeholder="Kg" value={form?.Weight} onChange={(e)=>{
+                                    handlechange("Weight",e.target.value)
+                                }} readOnly={!isediting}/>
                             </div>
                                 <div className="col-sm-3">
                                     <label id="Height" className="form-label">Height</label>
-                                    <input type="text" className="form-control" id="Weight"  placeholder="cm" value={form?.height} onChange={(e)=>{
-                                        handlechange("height",e.target.value)
-                                    }}/>
+                                    <input type="text" className="form-control" id="Weight"  placeholder="cm" value={form?.Height} onChange={(e)=>{
+                                        handlechange("Height",e.target.value)
+                                    }} readOnly={!isediting}/>
                                 </div>
                             </div>
                             <hr/>
                             <div className="row">
                                  <div className="col-sm-3">
                                     <label id="Phone" className="form-label">Phone</label>
-                                    <input type="text" className="form-control" id="Phone" value={form?.phone} onChange={(e)=>{
-                                        handlechange("phone",e.target.value)
-                                    }}/>
+                                    <input type="text" className="form-control" id="Phone" value={form?.Phone} onChange={(e)=>{
+                                        handlechange("Phone",e.target.value)
+                                    }} readOnly={!isediting}/>
                                  </div>
                                  <div className="col-sm-5">
                                         <label id="Lineid" className="form-label">Line id</label>
                                         <input type="text" className="form-control" id="lineid" value={form?.Lineid} onChange={(e)=>{
-                                            handlechange("lineid",e.target.value)
-                                        }} />
+                                            handlechange("Lineid",e.target.value)
+                                        }} readOnly={!isediting}/>
                                  </div>
                             </div>
                             <div className="row">
                                 <div className="d-flex justify-content-center mt-4">
-                                    <button type="submit" className="btn btn-primary " disabled={loading} onClick={submit}>Save</button>
+                                    {isediting ? (
+                                        <>
+                                            <button type="button" className="btn btn-primary" disabled={loading} onClick={handlesave}>
+                                                {loading ? 'Saveing..' : 'Save'}
+                                            </button>
+                                            <button type="button" className="btn btn-secondary ms-2" onClick={handlecanscel}>
+                                                Cancel
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <button type="button" className="btn btn-outline-primary" onClick={() => setisediting(true)}>
+                                            Edit Profile
+                                        </button>
+                                    )
+
+                                    }
                                 </div>
                             </div>
                     </div>

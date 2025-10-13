@@ -21,7 +21,7 @@ router.post("/upsert", requireAuth,async (req,res) =>{
             Lastname: req.body.Lname,
             Gender: req.body.gender,
             Birthday: req.body.date,
-            Country: req.body.contry,
+            Country: req.body.Country,
             Nationality: req.body.nation,
             Weight: req.body.weight,
             Height: req.body.height,

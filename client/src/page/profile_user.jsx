@@ -79,12 +79,19 @@ function  Profile_user(){
 
                 <div className="col-lg-8">
                     <div className="card mb-4">
-                        <img src="..." className="card-img-top" alt="..."/>
+                        <img src="..    ." className="card-img-top" alt="..."/>
                         <div className="card-body">
                             <div className="card-title">
                                 <h5 className="text-center">About Me</h5>
                             </div>
-                            <p className="card-text ">Name: {form?.name}</p>
+                            <div className="row">
+                               <div className="col-sm-5">
+                                   <p className="card-text ">Name: {form?.name}</p>
+                               </div>
+                                <div className="col-sm-5">
+                                    <p className="card-text ">Name: {form?.name}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
