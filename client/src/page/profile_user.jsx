@@ -1,5 +1,5 @@
 import React ,{useState,useEffect}from "react"
-import api, {setAccessToken} from "../api/axios.js";
+import api from "../api/axios.js";
 import axios from "axios";
 function  Profile_user(){
     const [form,setform] = useState({})

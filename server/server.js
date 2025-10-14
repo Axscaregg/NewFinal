@@ -7,6 +7,7 @@ const Adddata = require("./router/putpost")
 const update = require("./router/update")
 const profile = require("./router/profile")
 const Auth = require('./router/auth')
+const profileEdit = require('./router/profileEdit')
 const cookieParser = require('cookie-parser')
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/profile",profile)
+app.use('/profiles',profileEdit)
 app.use('/users', usersRouter);
 app.use('/api',Auth)
 app.use('/',Adddata)

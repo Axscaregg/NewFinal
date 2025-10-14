@@ -5,6 +5,7 @@ import Login from "./page/Login.jsx";
 import Register from "./page/register.jsx";
 import Profile from "./page/profile.jsx";
 import Profile_user from "./page/profile_user.jsx";
+import Education from "./page/education.jsx";
 function App() {
 
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/profile/me" element={<Profile_user/>}/>
+        <Route path="/profiles" element={<Education/>}/>
     </Routes>
   )
 }
