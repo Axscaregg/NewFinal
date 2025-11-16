@@ -58,7 +58,7 @@ function Navbar(){
 
                                 {!user ? (
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/login">Sign Up</a>
+                                        <a className="nav-link" href="/login">Sign in</a>
                                     </li>
                                 ) : (
                                     <>
@@ -82,7 +82,7 @@ function Navbar(){
                 </div>
                 <div className="ms-auto d-none d-md-inline-block">
                     {!user ? (
-                        <a href="/login" className="mt-1">Sign Up</a>
+                        <a href="/login" className="mt-1">Sign in</a>
                     ) : (
                         <div className="dropdown">
                             <button className="btn bg-light border dropdown-toggle rounded-pill px-3 py-1"

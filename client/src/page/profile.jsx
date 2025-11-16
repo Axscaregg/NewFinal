@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import api from "../api/axios.js";
-import {setAccessToken} from "../api/axios.js";
+import {useNavigate} from "react-router-dom";
 
 function profile(){
     const [form,setform] = useState({})
@@ -54,6 +54,7 @@ function profile(){
     const [error,seterror] = useState("")
     const [isediting,setisediting] = useState(false)
     const [backup,setbackup] = useState({})
+    const navigator = useNavigate()
     useEffect(()=>{
         const fetchapi  = async ()=>{
             try {
@@ -70,7 +71,7 @@ function profile(){
             }
         }
         fetchapi()
-    },[])
+    },[loading])
 
     const handlesave = async () =>{
         await submit()
@@ -111,53 +112,53 @@ function profile(){
 
             })
             console.log("Success")
+
         }catch (error){
         console.error("Error input",error)
             seterror("An unexpected error occurred. Please try again.");
         }finally {
-            setloading(false)
+            setloading(true)
+
         }
     }
     return(
-        <div className="container-xxl mt-3 my-md4 ">
+        <div className="container-xxl mt-3 my-md-4 ">
             <div className="row">
-                <div className="col-lg-3 mb-4">
+                    <div className="col-lg-3 mb-4">
 
-                                <div className="flex align-items-start">
-                                    <div className="accordion  my-accordion w-75"  >
-                                        <div className="accordion-item">
-                                            <h2  className="accordion-header">
-                                                <button className="accordion-button" type="button"
-                                                        data-bs-toggle="collapse"
-                                                        data-bs-target="#panelsStayOpen-collapseOne"
-                                                        aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                    Account
-                                                </button>
-                                            </h2>
-                                            <div id="panelsStayOpen-collapseOne"
-                                                 className="accordion-collapse collapse show">
-                                                <div className="accordion-body">
-                                                    <div className="list-group">
-                                                        <button type="button"
-                                                                className="list-group-item list-group-item-action "
-                                                                aria-current="true">
-                                                            Profile
-                                                        </button>
-                                                        <div className="my-2"></div>
-                                                        <button type="button"
-                                                                className="list-group-item list-group-item-action "
-                                                                aria-current="true">
-                                                            Education
-                                                        </button>
+                                    <div className="flex align-items-start">
+                                        <div className="accordion  my-accordion w-75"  >
+                                            <div className="accordion-item">
+                                                <h2  className="accordion-header">
+                                                    <button className="accordion-button" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#panelsStayOpen-collapseOne"
+                                                            aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                                        Account
+                                                    </button>
+                                                </h2>
+                                                <div id="panelsStayOpen-collapseOne"
+                                                     className="accordion-collapse collapse show">
+                                                    <div className="accordion-body">
+                                                        <div className="list-group">
+                                                          <a className="list-group-item list-group-item-action " role="button" aria-current="true" href="/profile/me">
+                                                              Profile
+                                                          </a>
+                                                            <div className="my-2"></div>
+                                                            <button type="button"
+                                                                    className="list-group-item list-group-item-action "
+                                                                    aria-current="true">
+                                                                Education
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
+
                                             </div>
-
                                         </div>
-                                    </div>
 
-                                </div>
-                </div>
+                                    </div>
+                    </div>
 
 
                 <div className="col-lg-8">
@@ -200,13 +201,14 @@ function profile(){
                                     <label htmlFor="country" className="form-label">Nation</label>
                                     <select id="inputcountry" className="form-select" value={form?.Country} onChange={(e)=>{
                                         handlechange("Country",e.target.value)
-                                    }} >
+                                    }} disabled={!isediting}>
+
                                         <option value="">Select
                                         </option>{COUNTRIES.map((country)=>(
                                             <option key={country} value={country}>
                                                 {country}
                                             </option>
-                                    ))} disabled={!isediting}
+                                    ))}
                                     </select>
                                 </div>
                             </div>
@@ -216,22 +218,23 @@ function profile(){
                                 <label htmlFor="nation" className="form-label">RELIGIONS</label>
                                 <select id="inputnation" className="form-select" value={form?.Nationality} onChange={(e)=>{
                                     handlechange("Nationality",e.target.value)
-                                }}>
+                                }} disabled={!isediting}>
+
                                     <option value="">Select
                                     </option>{RELIGIONS.map((nation)=>(
                                     <option key={nation} value={nation}>{nation}</option>
-                                ))} disabled={!isediting}
+                                ))}
                                 </select>
                             </div>
                             <div className="col-sm-3">
                                 <label id="Weight" className="form-label">Weight</label>
-                                <input type="text" className="form-control" id="Weight"  placeholder="Kg" value={form?.Weight} onChange={(e)=>{
+                                <input type="text" className="form-control" id="Weight"  placeholder="Kg" value={form?.update?.Weight} onChange={(e)=>{
                                     handlechange("Weight",e.target.value)
                                 }} readOnly={!isediting}/>
                             </div>
                                 <div className="col-sm-3">
                                     <label id="Height" className="form-label">Height</label>
-                                    <input type="text" className="form-control" id="Weight"  placeholder="cm" value={form?.Height} onChange={(e)=>{
+                                    <input type="text" className="form-control" id="Height"  placeholder="cm" value={form?.Height} onChange={(e)=>{
                                         handlechange("Height",e.target.value)
                                     }} readOnly={!isediting}/>
                                 </div>

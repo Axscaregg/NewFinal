@@ -28,10 +28,10 @@ router.get("/main",requireAuth,async (req,res) =>{
 
        const doc = await db.collection("users").findOne(
            {_id: new ObjectId(req.user.id)},
-           { projection: { passwordHash: 0, refreshToken: 0 } }
+           {projection: {passwordHash: 0, refreshToken: 0}}
        )
-       res.json(doc ?? {...doc, html:doc?.html ||""})
-   }catch (e){
+       res.json(doc ?? {...doc, html: doc?.html || ""})
+   } catch (e) {
         console.error("error cause",e)
 
    }

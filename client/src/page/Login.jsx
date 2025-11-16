@@ -11,9 +11,6 @@ function Login(){
     const navigate = useNavigate();
 
     useEffect(()=>{
-        const token = localStorage.getItem("accessToken")
-
-
         (async ()=>{
             try {
                 const {data} = await  api.get("/profile/me")
@@ -63,7 +60,7 @@ function Login(){
             </div>
             <div className="card shadow-sm border-0 col-3" style={{maxWidth: "450px", width: "100%"}}>
                 <div className="card-body">
-                    <h3 className="card-title text-center mb-4">Login Employee</h3>
+                    <h3 className="card-title text-center mb-4">Login</h3>
 
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">Email Address</label>
@@ -89,6 +86,9 @@ function Login(){
                     <div className="text-center mt-3">
                         <small>Not a member? <a href="/register">Register</a></small>
                     </div>
+                    <div className="text-center mt-3">
+                        <small>Or login for post job  <a href="/RegisterEm">Register</a> </small>
+                    </div>
                 </div>
             </div>
         </div>
@@ -97,7 +97,3 @@ function Login(){
 }
 
 export default Login
-//<label htmlFor="email " >Email Address</label>
-//                     <input type="email" id="email" className="form-control col-3" placeholder="Enter Email"/>
-//                     <label htmlFor="password " className="col-3 mt-5">Password</label>
-//                     <input type="password" id="password" className="form-control col-3" placeholder="Enter Password"/>

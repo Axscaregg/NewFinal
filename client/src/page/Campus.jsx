@@ -1,42 +1,20 @@
-import React ,{useState,useEffect}from "react"
+import React , {useState,useEffect} from "react";
 import api from "../api/axios.js";
-import axios from "axios";
-function  Profile_user(){
+
+function Campus (){
     const [form,setform] = useState({})
-    const [loading,setloading] = useState(true  )
+    const [loading,setloading] = useState(true)
+    const EducationalLevel = ["Lower than High School","Junior High School","Senior High School"
+        ,"Vocational certificate","Technical certificate","High vocational certificate","Diploma"
+        ,"Bachelor Degree","Master's Degree","Doctoral Degree"]
     const [error,seterror] = useState("")
-
-    useEffect( ()=>{
-        const controller = new AbortController();
-        (async ()=>{
-            try {
-
-                const {data} = await api.get("profile/me",{
-                    signal: controller.signal
-                })
-                setform(data)
-                console.log(form)
-            }catch (e){
-                if (axios.isCancel(e)) {
-
-                    console.log("Request was canceled, this is normal in development.");
-                } else {
-
-                    console.error("Error condition", e);
-                    seterror("Profile invalid");
-                }
-            }finally {
-                setloading(false)
-            }
-        })()
-        return ()=>{
-            controller.abort()
-        }
-
-    },[])
-
+    const handlechange = (name,value) =>{
+        setform((prev) =>{
+            return{...prev,[name]:value}
+        })
+    }
     return(
-        <div className="container-xxl mt-3 my-md4 ">
+        <div className="container-xxl mt-3 my-md-4">
             <div className="row">
                 <div className="col-lg-3 mb-4">
 
@@ -55,11 +33,9 @@ function  Profile_user(){
                                      className="accordion-collapse collapse show">
                                     <div className="accordion-body">
                                         <div className="list-group">
-                                            <button type="button"
-                                                    className="list-group-item list-group-item-action "
-                                                    aria-current="true">
+                                            <a className="list-group-item list-group-item-action " role="button" aria-current="true" href="/profile/me">
                                                 Profile
-                                            </button>
+                                            </a>
                                             <div className="my-2"></div>
                                             <button type="button"
                                                     className="list-group-item list-group-item-action "
@@ -75,21 +51,28 @@ function  Profile_user(){
 
                     </div>
                 </div>
-
-
-                <div className="col-lg-8">
+                <div className="col-lg-6">
                     <div className="card mb-4">
-                        <img src={`http://localhost:5000${form?.avatar}`} className="card-img-top" alt="..."/>
                         <div className="card-body">
-                            <div className="card-title">
-                                <h5 className="text-center">About Me</h5>
+                            <div className="row">
+                                <div className="col-sm">
+                                    <label id="Educationallevel" className="form-label">Educational Level</label>
+                                    <select id="Educationallevel" className="form-select" value={form?.EducationLevel} onChange={(e)=>{
+                                        handlechange("EducationLevel",e.target.value)
+                                    }}>
+                                        <option value="">Select
+                                        </option>{EducationalLevel.map((Edu)=>(
+                                            <option key={Edu} value={Edu}>{Edu}</option>
+                                    ))}
+                                    </select>
+                                </div>
                             </div>
                             <div className="row">
-                               <div className="col-sm-5">
-                                   <p className="card-text ">Name: {form?.name}</p>
-                               </div>
-                                <div className="col-sm-5">
-                                    <p className="card-text ">Name: {form?.name}</p>
+                                <div className="col-sm-4">
+                                    <label id="School" className="form-label">School</label>
+                                    <input type="text" style={{minWidth:340}} className="form-control" id="School" value={form?.School} onChange={(e)=>{
+                                        handlechange("School",e.target.value)
+                                    }}/>
                                 </div>
                             </div>
                         </div>
@@ -100,4 +83,4 @@ function  Profile_user(){
         </div>
     )
 }
-export default  Profile_user
+export  default  Campus

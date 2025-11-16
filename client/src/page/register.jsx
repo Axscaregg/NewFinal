@@ -1,4 +1,4 @@
-import  react, {useState} from "react";
+import  React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {registers} from "../api/auth.js";
 
@@ -18,17 +18,23 @@ function  register(){
             setloading(true)
             seterror("")
           try {
+              if (!form.name || !form.lastname || !form.email || !form.password || !form.cfpass) {
+                  seterror("Error pls ");
+                  setloading(false); return;
+              }
+
               if (form.password !== form.cfpass) {
                   seterror("Passwords do not match");
                   setloading(false);
                   return;
               }
-            const res=  await registers(form.email, form.password,form.name,form.lastname)
+            const res=  await registers(form.email, form.password,form.name,form.lastname,form.cfpass)
                     console.log(res)
                     navigate("/login");
 
           }  catch (e){
               console.log(e)
+              alert(error);
           } finally {
               setloading(false)
 

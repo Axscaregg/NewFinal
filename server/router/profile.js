@@ -32,19 +32,21 @@ router.post("/upsert", requireAuth,async (req,res) =>{
 
         const r = await db.collection("users").updateOne(
             { _id: new ObjectId(req.user.id) },
-            { $set: update  }
+            { $set: {update}  }
         );
     return     res.json({ok: true})
     }catch (e){
         console.error("Error upsert",e)
     }
+
+// router.post("/upsert/Education",requireAuth,async (req,res)=>{
+//     try{
+//         const db = getDB()
+//         const update={
+//             Educationlevel: req.body.EducationLevel
+//         }
+//     }
+// })
+
 })
 module.exports = router
-
-// const r = await db.collection("user").updateOne(
-//     filer,
-//     {
-//         $set: update, $setOnInsert:{ _id: new objectID(req.body.id), createdAt: new Date()}
-// },
-//     {upsert: true}
-// )

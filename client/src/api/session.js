@@ -1,4 +1,3 @@
-// src/api/sessionHelpers.js
 import api, { setAccessToken } from "./axios";
 export function setAccessTokenAfterRefresh(newToken) {
     localStorage.setItem("accessToken",newToken)

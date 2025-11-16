@@ -3,9 +3,13 @@ import {startInactive,stopInactive,touchActivity} from "./authcontroltime.js";
 function notifyAuthChanged() {
     window.dispatchEvent(new Event("authChange"));
 }
-export async function registers(email,password,name,lastname){
-        await  api.post("/api/register",{email,password,name,lastname})
+export async function registers(email,password,name,lastname,confirmpassword){
+        await  api.post("/api/register",{email,password,name,lastname,confirmpassword})
 }
+export async function registersEm(email,password,confirmpassword){
+    await  api.post("/api/register/em",{email,password,confirmpassword})
+}
+
 
 export  async function login(email,password){
        const{data} = await  api.post("/api/login",{email,password})

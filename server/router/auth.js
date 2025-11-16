@@ -13,8 +13,8 @@ const signRefresh = (p) => jwt.sign(p, process.env.JWT_REFRESH_SECRET, { expires
 
 router.post("/register", async (req,res)=>{
     try{
-        const {email , password , name,lastname} = req.body ?? {}
-        if (!email || !password) return res.status(400).json({ message: "email/password จำเป็นต้องกรอก" });
+        const {email , password , name,lastname,confirmpassword} = req.body ?? {}
+        if (!email || !password || !confirmpassword) return res.status(400).json({ message: "email/password จำเป็นต้องกรอก" });
         const db = getDB()
         const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
         const doc ={email:email.toLowerCase(), passwordHash,name,lastname}
@@ -29,6 +29,27 @@ router.post("/register", async (req,res)=>{
     }
 
 })
+router.post("/register/em", async (req,res)=>{
+    try{
+        const {email , password,confirmpassword} = req.body ?? {}
+        if (!email || !password || !confirmpassword) return res.status(400).json({ message: "email/password จำเป็นต้องกรอก" });
+        const db = getDB()
+        const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
+        const doc ={email:email.toLowerCase(), passwordHash}
+        const result = await db.collection("users").insertOne(doc)
+        res.status(201).json({
+            doc,
+            _id: result.insertedId
+        })
+    }catch (e){
+        if (e?.code === 11000) return res.status(409).json({ message: "อีเมลนี้ถูกใช้แล้ว" });
+        console.error(e); res.status(500).json({ message: "เกิดข้อผิดพลาด" });
+    }
+
+})
+
+
+
 router.post("/login", async  (req,res) =>{
     try {
         const  {email,password} = req.body ??{}
@@ -44,7 +65,7 @@ router.post("/login", async  (req,res) =>{
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
-            path: "/api",
+            path: "/",
             maxAge: 7*24*60*60*1000
         })
         res.json({accessToken,user:{id:String(user._id), email:user.email}})
@@ -65,7 +86,7 @@ router.post("/refresh", (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-    res.clearCookie("refresh_Token", { path: "/api" });
+    res.clearCookie("refresh_Token", { path: "/" });
     res.json({ message: "Logged out" });
 })
 module.exports = router

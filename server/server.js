@@ -8,6 +8,8 @@ const update = require("./router/update")
 const profile = require("./router/profile")
 const Auth = require('./router/auth')
 const profileEdit = require('./router/profileEdit')
+const Uploadimage = require('./router/uploadimage')
+
 const cookieParser = require('cookie-parser')
 
 const app = express();
@@ -15,6 +17,7 @@ app.use(cors({
     origin: "http://localhost:5173",
     credentials: true,
 }));
+app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -24,6 +27,7 @@ app.use('/users', usersRouter);
 app.use('/api',Auth)
 app.use('/',Adddata)
 app.use('/',update)
+app.use('/',Uploadimage)
 connectDB().then(() => {
     app.listen(process.env.PORT, () => {
 

@@ -6,6 +6,9 @@ import Register from "./page/register.jsx";
 import Profile from "./page/profile.jsx";
 import Profile_user from "./page/profile_user.jsx";
 import Education from "./page/education.jsx";
+import Protectrouter from "./api/protectrouter.jsx";
+import Campus from "./page/Campus.jsx"
+import RegisterEmployers from "./page/RegisterEmployer.jsx"
 function App() {
 
   return (
@@ -14,9 +17,29 @@ function App() {
       <Route path="/home" element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="/profile" element={<Profile/>}/>
-        <Route path="/profile/me" element={<Profile_user/>}/>
-        <Route path="/profiles" element={<Education/>}/>
+        <Route path="/profile" element={
+            <Protectrouter>
+                <Profile/>
+            </Protectrouter>
+            }/>
+        <Route path="/profile/me" element={
+            <Protectrouter>
+                <Profile_user/>
+            </Protectrouter>}/>
+        <Route path="/profiles" element={
+            <Protectrouter>
+                <Education/>
+            </Protectrouter>}/>
+        <Route path="/Campus" element={
+            <Protectrouter>
+                <Campus/>
+            </Protectrouter>
+        }/>
+        <Route path="/RegisterEm" element={
+            <Protectrouter>
+                <RegisterEmployers/>
+            </Protectrouter>
+        }/>
     </Routes>
   )
 }
