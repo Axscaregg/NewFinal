@@ -1,0 +1,78 @@
+   <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
+
+                <div className="card shadow-sm border-0 col-3" style={{maxWidth: "800px", width: "100%"}}>
+                    <div className="card-body">
+                        <h3 className="card-title text-center mb-4">Login Employer</h3>
+                        <div className="row mb-3">
+                            <div className="col-md">
+                                <label htmlFor="name" className="form-label">Name</label>
+                                <input type="text" className="form-control" id="name" placeholder="Enter yourname" value={form?.name}  onChange={(e) =>{
+                                    handlechange("name",e.target.value)
+                                }}/>
+                            </div>
+                            <div className="col-md">
+                                <label htmlFor="Lastname" className="form-label">LastName</label>
+                                <input type="text" className="form-control" id="Lastname" placeholder="Enter yourLastname" value={form?.Lastname}  onChange={(e) =>{
+                                    handlechange("Lastname",e.target.value)
+                                }}/>
+                            </div>
+
+                        </div>
+                        <div className="row mt-4">
+                            <div className="col-md">
+                            <label htmlFor="Phone" className="form-label">LastName</label>
+                            <input type="text" className="form-control" id="Phone" placeholder="Phone number" value={form?.Phone}  onChange={(e) =>{
+                                handlechange("Phone",e.target.value)
+                            }}/>
+                            </div>
+                            <div className="col-md">
+                                <label htmlFor="Email" className="form-label">LastName</label>
+                                <input type="text" className="form-control" id="Email" placeholder="Emaill" value={form?.Email}  onChange={(e) =>{
+                                    handlechange("Email",e.target.value)
+                                }}/>
+                            </div>
+                        </div>
+                        <div  className="row mt-4">
+                            <div className="col-auto">
+                                <input type='radio' id='company' className="form-check-input" name="userType" value="Company" checked={form?.type === "Company"} onChange={(e) =>{
+                                            handlechange("type",e.target.value)
+                                }}/>
+                            </div>
+                            <div className="col-auto">
+                                <label htmlFor="company" className="form-check-label " >Company</label>
+                            </div>
+                            <div className="col-auto">
+                                <input type='radio' id='General' className="form-check-input"  name="userType" value="General" checked={form?.type === "General"} onChange={(e) =>{
+                                    handlechange("type",e.target.value)
+                                }}/>
+                            </div>
+                            <div className="col-auto">
+                                <label htmlFor="General" className="form-check-label " >General</label>
+                            </div>
+                        </div>
+                        <div className="row mt-4">
+                            {form.type === "Company" && (
+                                <>
+                                <div className="row mt-3">
+                                    <div className="col-md">
+                                        <label htmlFor="CompanyName" className="form-label">Company Name</label>
+                                        <input type="text" className="form-control" id="CompanyName" placeholder="Your CompanyName" value={form?.CName}  onChange={(e) =>{
+                                            handlechange("CompanyName",e.target.value)
+                                        }}/>
+                                    </div>
+                                </div>
+
+                                <div className="row mt-3">
+                                    <div className="col-md"></div>
+                                    <label htmlFor="BusinessType" className="form-label">Business Type</label>
+                                </div>
+                            </>
+                                )}
+                        </div>
+                        <button type="submit" className="btn  btn-outline-primary mt-5" disabled={loading} onClick={submit}>Register</button>
+
+
+                    </div>
+                </div>
+
+        </div>

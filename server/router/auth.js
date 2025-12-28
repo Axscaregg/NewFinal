@@ -31,11 +31,11 @@ router.post("/register", async (req,res)=>{
 })
 router.post("/register/em", async (req,res)=>{
     try{
-        const {email , password,confirmpassword} = req.body ?? {}
+        const {email , password,confirmpassword,accountType,company,general} = req.body ?? {}
         if (!email || !password || !confirmpassword) return res.status(400).json({ message: "email/password จำเป็นต้องกรอก" });
         const db = getDB()
         const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
-        const doc ={email:email.toLowerCase(), passwordHash}
+        const doc ={email:email.toLowerCase(), passwordHash,role:"employer",accountType,company: accountType === "company" ? company:null, general: accountType === "General" ? general : null , createdAt: new Date()};
         const result = await db.collection("users").insertOne(doc)
         res.status(201).json({
             doc,

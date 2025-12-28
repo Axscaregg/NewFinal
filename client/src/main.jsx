@@ -6,6 +6,7 @@ import './csscustom.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import Navbar from "./component/Navbar.jsx";
+import Seacher from './component/searchbar.jsx'
 
 
 
@@ -14,7 +15,8 @@ createRoot(document.getElementById('root')).render(
       <BrowserRouter>
 
                         <Navbar/>
-                        <App/>
+          {/*<Seacher/>*/}
+          <App/>
 
 
 

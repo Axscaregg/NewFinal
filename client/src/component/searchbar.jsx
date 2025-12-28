@@ -44,3 +44,4 @@ function searchbar({onSearch}){
         </form>
     )
 }
+export default searchbar;

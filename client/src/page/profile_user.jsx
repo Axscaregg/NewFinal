@@ -79,7 +79,7 @@ function  Profile_user(){
 
                 <div className="col-lg-8">
                     <div className="card mb-4">
-                        <img src={`http://localhost:5000${form?.avatar}`} className="card-img-top" alt="..."/>
+                        <img src={`http://localhost:5000${form?.avatar}`} className="card-img-top align-self-center" style={{width: "200px" , }} alt="..."/>
                         <div className="card-body">
                             <div className="card-title">
                                 <h5 className="text-center">About Me</h5>

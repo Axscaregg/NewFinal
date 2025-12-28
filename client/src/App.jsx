@@ -36,9 +36,9 @@ function App() {
             </Protectrouter>
         }/>
         <Route path="/RegisterEm" element={
-            <Protectrouter>
+
                 <RegisterEmployers/>
-            </Protectrouter>
+
         }/>
     </Routes>
   )

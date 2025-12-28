@@ -6,8 +6,8 @@ function notifyAuthChanged() {
 export async function registers(email,password,name,lastname,confirmpassword){
         await  api.post("/api/register",{email,password,name,lastname,confirmpassword})
 }
-export async function registersEm(email,password,confirmpassword){
-    await  api.post("/api/register/em",{email,password,confirmpassword})
+export async function registersEm(data){
+    await  api.post("/api/register/em",data)
 }
 
 

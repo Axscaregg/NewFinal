@@ -3,7 +3,7 @@ const cors = require('cors');
 const { connectDB, getDB } = require('./Database/db');
 require('dotenv').config();
 const usersRouter = require("./router/getdata")
-const Adddata = require("./router/putpost")
+
 const update = require("./router/update")
 const profile = require("./router/profile")
 const Auth = require('./router/auth')
@@ -25,10 +25,10 @@ app.use("/profile",profile)
 app.use('/profiles',profileEdit)
 app.use('/users', usersRouter);
 app.use('/api',Auth)
-app.use('/',Adddata)
+
 app.use('/',update)
 app.use('/',Uploadimage)
-connectDB().then(() => {
+connectDB().then(() => {    
     app.listen(process.env.PORT, () => {
 
 
