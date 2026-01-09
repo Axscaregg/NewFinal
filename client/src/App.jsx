@@ -9,6 +9,7 @@ import Education from "./page/education.jsx";
 import Protectrouter from "./api/protectrouter.jsx";
 import Campus from "./page/Campus.jsx"
 import RegisterEmployers from "./page/RegisterEmployer.jsx"
+import Employer_User from "./page/employer_User.jsx"
 function App() {
 
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/home" element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
+        <Route path="/employer_user" element={<Employer_User/>}/>
         <Route path="/profile" element={
             <Protectrouter>
                 <Profile/>

@@ -9,7 +9,7 @@ const profile = require("./router/profile")
 const Auth = require('./router/auth')
 const profileEdit = require('./router/profileEdit')
 const Uploadimage = require('./router/uploadimage')
-
+const Employer = require('./router/Employer')
 const cookieParser = require('cookie-parser')
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(cors({
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(cookieParser());
-
+app.use("/Em",Employer);
 app.use("/profile",profile)
 app.use('/profiles',profileEdit)
 app.use('/users', usersRouter);

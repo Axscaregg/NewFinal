@@ -1,4 +1,4 @@
-const express =require('express')
+const express = require("express")
 const jwt = require('jsonwebtoken');
 const argon2 = require('argon2')
 const {getDB} = require("../Database/db");
@@ -58,7 +58,7 @@ router.post("/login", async  (req,res) =>{
         if(!user) return res.status(401).json({message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง"})
         const agreement = await  argon2.verify(user.passwordHash,password)
         if(!agreement) return  res.status(401).json({message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง"})
-        const payload ={ sub:String(user._id) , email: user.email}
+        const payload ={ sub:String(user._id) , email: user.email,role:user.role }
         const accessToken = signAccess(payload)
         const refreshToken = signRefresh(payload)
         res.cookie("refresh_Token",refreshToken,{
@@ -68,9 +68,10 @@ router.post("/login", async  (req,res) =>{
             path: "/",
             maxAge: 7*24*60*60*1000
         })
-        res.json({accessToken,user:{id:String(user._id), email:user.email}})
+        res.json({accessToken,user:{id:String(user._id), email:user.email,role:user.role  }})
 
     }catch (e){
+        console.error(e); res.status(500).json({ message: "เกิดข้อผิดพลาด" });
         console.error(e); res.status(500).json({ message: "เกิดข้อผิดพลาด" });
     }
 
@@ -80,7 +81,7 @@ router.post("/refresh", (req, res) => {
     if (!rt) return res.status(401).json({ message: "ไม่มี refresh token" });
     try {
         const d = jwt.verify(rt, process.env.JWT_REFRESH_SECRET);
-        const accessToken = signAccess({ sub: d.sub, email: d.email });
+        const accessToken = signAccess({ sub: d.sub, email: d.email, role:d.role  });
         res.json({ accessToken });
     } catch { res.status(401).json({ message: "refresh token ไม่ถูกต้อง" }); }
 });

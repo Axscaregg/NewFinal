@@ -60,8 +60,8 @@ function profile(){
             try {
                     const {data} = await api.get("/profile/me")
                 if(data){
-                    setform(data)
-                    setbackup(data)
+                    setform(data.update)
+                    setbackup(data.update)
                 }
             }catch (error){
                 console.log("Can't fetch data",error)
@@ -117,7 +117,7 @@ function profile(){
         console.error("Error input",error)
             seterror("An unexpected error occurred. Please try again.");
         }finally {
-            setloading(true)
+            setloading(false)
 
         }
     }
@@ -228,7 +228,7 @@ function profile(){
                             </div>
                             <div className="col-sm-3">
                                 <label id="Weight" className="form-label">Weight</label>
-                                <input type="text" className="form-control" id="Weight"  placeholder="Kg" value={form?.update?.Weight} onChange={(e)=>{
+                                <input type="text" className="form-control" id="Weight"  placeholder="Kg" value={form?.Weight} onChange={(e)=>{
                                     handlechange("Weight",e.target.value)
                                 }} readOnly={!isediting}/>
                             </div>

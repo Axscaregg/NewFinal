@@ -4,23 +4,26 @@ import {useNavigate} from "react-router-dom";
 import {login} from "../api/auth.js";
 import {setAccessToken} from "../api/axios.js";
 
+
 function Login(){
     const [form,setform] = useState({})
     const [loading,setloading] = useState(false)
     const [error,seterror] = useState("")
     const navigate = useNavigate();
 
-    useEffect(()=>{
-        (async ()=>{
-            try {
-                const {data} = await  api.get("/profile/me")
-                if(data) setform(data)
-            }catch (e){
-                console.error(e)
-                seterror("Error Get Profile")
-            }
-        })()
-    },[])
+    // useEffect(()=>{
+    //     (async ()=>{
+    //         try {
+    //             const {data} = await  api.get("/profile/me")
+    //             if(data) {
+    //                 navigate("/profile")
+    //             }
+    //         }catch (e){
+    //             console.error(e)
+    //             seterror("Error Get Profile")
+    //         }
+    //     })()
+    // },[])
 
     const handlechange = (email,values) =>{
         setform((prev)=>{
@@ -36,8 +39,11 @@ function Login(){
         try {
             const result = await login(form.email, form.password)
             localStorage.setItem("user", JSON.stringify(result));
-            window.dispatchEvent(new Event("userchange"));
-            navigate("/profile");
+            if (result.role === "employer") {
+                navigate("/employer_user");
+            } else {
+                navigate("/profile");
+            }
         } catch (error) {
             console.error("Login error:", error);
             seterror("An unexpected error occurred. Please try again.");
