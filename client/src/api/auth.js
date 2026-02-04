@@ -15,6 +15,7 @@ export  async function login(email,password){
        const{data} = await  api.post("/api/login",{email,password})
     localStorage.setItem("accessToken", data.accessToken)
     localStorage.setItem("user", JSON.stringify(data.user));
+    window.dispatchEvent(new Event("UserIn"))
        notifyAuthChanged()
     startInactive(async ()=>{
         await  logout()

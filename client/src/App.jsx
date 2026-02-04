@@ -10,6 +10,7 @@ import Protectrouter from "./api/protectrouter.jsx";
 import Campus from "./page/Campus.jsx"
 import RegisterEmployers from "./page/RegisterEmployer.jsx"
 import Employer_User from "./page/employer_User.jsx"
+import PostJob from "./page/PostJob.jsx"
 function App() {
 
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/employer_user" element={<Employer_User/>}/>
+        <Route path="/postjob" element={<PostJob/>}/>
         <Route path="/profile" element={
             <Protectrouter>
                 <Profile/>

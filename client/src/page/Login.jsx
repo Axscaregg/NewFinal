@@ -3,6 +3,7 @@ import api from "../api/axios.js";
 import {useNavigate} from "react-router-dom";
 import {login} from "../api/auth.js";
 import {setAccessToken} from "../api/axios.js";
+import * as events from "node:events";
 
 
 function Login(){
@@ -39,6 +40,7 @@ function Login(){
         try {
             const result = await login(form.email, form.password)
             localStorage.setItem("user", JSON.stringify(result));
+
             if (result.role === "employer") {
                 navigate("/employer_user");
             } else {

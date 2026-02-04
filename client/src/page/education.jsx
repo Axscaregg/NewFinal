@@ -1,4 +1,4 @@
-import React, {useState, useEffect, use} from "react";
+import React, {useState, useEffect, } from "react";
 import api from "../api/axios.js"
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";

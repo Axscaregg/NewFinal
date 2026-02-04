@@ -1,6 +1,9 @@
 import React from "react";
 import api from "../api/axios.js";
 import {useState,useEffect} from "react";
+import Richtext from "../component/Richtext.jsx";
+import  Sidebar from "../component/Sidebar.jsx";
+import DOMPurify from "dompurify";
 function employer_User() {
     const [form,setform] = useState({})
     const [backup, setbackup] = useState({})
@@ -10,6 +13,7 @@ function employer_User() {
     const [Apidata, setApidata] = useState({})
     const id = localStorage.getItem("user")
     const storageObject = JSON.parse(id)
+    const [refresh, setRefresh] = useState(0);
     useEffect(()=>{
         const fetchApi = async () => {
             try{
@@ -27,10 +31,12 @@ function employer_User() {
             }
         }
         fetchApi()
-    },[loading])
+    },[refresh])
     const handlecanscel = ()=>{
         setform(backup)
         setisediting(false)
+        setRefresh((r) => r + 1);
+
     }
 
     const submit = async e => {
@@ -52,13 +58,15 @@ function employer_User() {
         }finally{
             setloading(false)
              setisediting(false)
+             setRefresh((r) => r + 1);
 
          }
     }
 
     const handlechange = (name,values) =>{
         setform((prev)=>{
-            return {...prev,[name]:values}
+            return {...prev,[name]:values,
+           }
         })
     }
 
@@ -66,10 +74,8 @@ function employer_User() {
     return (
         <>
         <div className="container-xxl ">
-           <div className="row">
-               <div className="col-lg-3 mb-4">
-
-               </div>
+           <div className="row mt-4">
+               <Sidebar/>
                <div className="col-lg-8">
                    <div className="card">
                        <div className="card-title">
@@ -85,6 +91,9 @@ function employer_User() {
                                 </div>
                            </div>
                            <div className=" mt-3" >Type Employer: {Apidata?.accountType}</div>
+                           <div className="mt-4">Detail: {<span dangerouslySetInnerHTML={{
+                               __html: DOMPurify.sanitize(form?.AboutMe || "<p></p>"),
+                           }}/>   }</div>
                        </div>
                    </div>
 
@@ -124,9 +133,11 @@ function employer_User() {
                            <div className="row">
                                <div className="col-md">
                                    <label htmlFor="AboutMe" className="form-label">AboutMe</label>
-                                   <textarea  id="AboutMe" className="form-control" rows={4} value={form?.AboutMe} onChange={(e)=>{
-                                       handlechange("AboutMe", e.target.value)
-                                   }} readOnly={!isediting}/>
+                                   <Richtext
+                                       value={form?.AboutMe || ""}
+                                       onChange={(html) => handlechange("AboutMe", html)}
+                                       editable={isediting}
+                                   />
                                </div>
                            </div>
 

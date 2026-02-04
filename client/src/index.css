@@ -68,3 +68,7 @@ button:focus-visible {
   background-color: goldenrod;
 
 }
+/*.breadcrumb{*/
+/*  --bs-breadcrumb-padding-x:9px ;*/
+/*  --bs-breadcrumb-padding-y:9px ;*/
+/*}*/

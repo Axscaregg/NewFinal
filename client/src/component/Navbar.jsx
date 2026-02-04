@@ -11,10 +11,14 @@ function Navbar(){
             setUser(u ? JSON.parse(u) : null);
         };
         load();
+        const Useload = () => load()
+        window.addEventListener("UserIn", Useload);
+        return () => window.removeEventListener("UserIn", Useload);
     }, []);
 
     const doLogout = async () => {
-        await logout();
+        await logout()
+        window.dispatchEvent(new Event("UserIn"))
         setUser(null);
 
         navigate("/")
